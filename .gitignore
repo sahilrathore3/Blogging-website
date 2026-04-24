@@ -1,0 +1,12 @@
+# Dependencies
+**/node_modules/
+package-lock.json
+
+# Local Environment Variables
+.env
+**/.env
+
+# User Uploads
+backend/uploads/blogs/*
+backend/uploads/profiles/*
+!backend/uploads/blogs/default-cover.jpg
