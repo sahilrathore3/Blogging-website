@@ -59,7 +59,7 @@ const BlogForm = () => {
     const { loading, error, createSuccess, updateSuccess, singleBlog } = useSelector((state) => state.blog);
 
     const base_url = "http://localhost:3000";
-    const categories = ["Food", "Travel", "Health & Fitness", "Lifestyle", "Fashion & Beauty", "DIY Craft", "Parenting", "Business", "Personal Finance", "Sports", "Other"];
+    const categories = ["Food", "Travel","Sports", "Health & Fitness", "Technology", "Science","Lifestyle", "Fashion & Beauty", "DIY Craft", "Parenting", "Business", "Other"];
 
     const formik = useFormik({
         initialValues: {

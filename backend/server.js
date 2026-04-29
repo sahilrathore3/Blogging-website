@@ -17,12 +17,14 @@ const authRoute = require("./routers/authRoute");
 const adminRoute = require("./routers/adminRoute");
 const userRoute = require("./routers/userRoutes");
 const blogRoute = require("./routers/blogRoute");
+const commentRoute = require('./routers/commentRoute');
 
 
 app.use("/api/auth", authRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/user", userRoute);
 app.use("/api/blog",blogRoute);
+app.use("/api/comment",commentRoute);
 
 const port = process.env.PORT || 3000;
 
