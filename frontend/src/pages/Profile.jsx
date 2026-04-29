@@ -31,7 +31,7 @@ const Profile = () => {
         dispatch(fetchMyBlogs());
     }, [dispatch]);
 
-    // ✨ DELETE HANDLER WITH SWEETALERT2
+    //  DELETE Blog
     const handleDelete = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -60,7 +60,7 @@ const Profile = () => {
         });
     };
 
-    // ✨ TOGGLE STATUS HANDLER
+    //  TOGGLE STATUS HANDLER
     const handleToggleStatus = (blog) => {
         const newStatus = blog.status === 'published' ? 'draft' : 'published';
         const formData = new FormData();

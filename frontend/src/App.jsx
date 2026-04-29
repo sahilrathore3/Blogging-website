@@ -13,6 +13,7 @@ import ProtectedRoute from './middleware/authMiddleware'
 import BlogDetails from './pages/BlogDetails'
 import BlogForm from './pages/BlogForm'
 import AllBlogs from './pages/AllBlogs'
+import UserBlogsManager from './pages/UserBlogsManager'
 
 
 const App = () => {
@@ -32,11 +33,12 @@ const App = () => {
             <Route path='/profile' element={<Profile />} />
             <Route path='/create-blog' element={<BlogForm />} />
             <Route path='/edit-blog/:id' element={<BlogForm />} />
-            <Route path="/blog/:id" element={<BlogDetails />} />
+            <Route path="/blog/:slug" element={<BlogDetails />} />
 
           </Route>
           <Route element={<ProtectedRoute adminOnly={true} />}>
             <Route path='/dashboard' element={<Dashboard />} />
+            <Route path="/admin/user-blogs/:userId" element={<UserBlogsManager />} />
           </Route>
         </Routes>
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createBlog, fetchRecentBlogs, fetchBlogById, fetchMyBlogs, deleteBlog, updateBlog } from "../thunk/blogThunk";
+import { createBlog, fetchRecentBlogs, fetchBlogById, fetchBlogBySlug, fetchMyBlogs, deleteBlog, updateBlog } from "../thunk/blogThunk";
 
 const blogSlice = createSlice({
     name: "blog",
@@ -70,7 +70,7 @@ const blogSlice = createSlice({
             })
 
 
-            // FETCH SINGLE BLOG BY ID (Home)
+            // FETCH SINGLE BLOG BY ID (Home,allblog)
             .addCase(fetchBlogById.pending, (state) => {
                 state.loading = true;
                 state.singleBlog = null; // Purana data saaf kar do
@@ -86,18 +86,33 @@ const blogSlice = createSlice({
                 state.error = action.payload;
             })
 
+            
+            // FETCH SINGLE BLOG BY Slug
+            .addCase(fetchBlogBySlug.pending, (state) => {
+                state.loading = true;
+                state.singleBlog = null; // Purana data saaf kar do
+                state.error = null;
+            })
+            .addCase(fetchBlogBySlug.fulfilled, (state, action) => {
+                state.loading = false;
+                state.singleBlog = action.payload.data; // Backend response ke hisab se
+                state.isFullContent = action.payload.isFullContent;
+            })
+            .addCase(fetchBlogBySlug.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
 
             // Fetch My Blogs (Profile)
             .addCase(fetchMyBlogs.pending, (state) => {
                 state.loading = true;
             })
-
             .addCase(fetchMyBlogs.fulfilled, (state, action) => {
                 state.loading = false;
-                const extractedArray = action.payload?.data?.myBlogs || [];
+                const extractedArray = action.payload?.data?.blogs || [];
                 state.myBlogs = extractedArray; // Ab ye hamesha ek ARRAY rahega
-
-                console.log("Slice Fixed: Array loaded with length:", extractedArray.length);
+                // console.log("Slice Fixed: Array loaded with length:", extractedArray.length);
             })
 
 

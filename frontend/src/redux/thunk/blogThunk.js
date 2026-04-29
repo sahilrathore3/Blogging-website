@@ -18,13 +18,13 @@ export const createBlog = createAsyncThunk(
 );
 
 
-//  Fetch Recent 10 Blogs (Home Page and AllBlogs.jsx)
+//  Fetch Recent 10 Blogs and All blogs (Home Page and AllBlogs.jsx)
 export const fetchRecentBlogs = createAsyncThunk(
     "blog/fetchRecent",
     async ({ page = 1, limit = 10, sort = " " }, { rejectWithValue }) => {
         try {
             const res = await API.get(`http://localhost:3000/api/blog?page=${page}&limit=${limit}&sort=${sort}`);
-            console.log("Backend Response:", res.data);
+            // console.log("Backend Response:", res.data);
             // Backend sorted data bhej raha hai, hum bas top 10 slice kar lenge
             return res.data
         } catch (error) {
@@ -47,17 +47,34 @@ export const fetchBlogById = createAsyncThunk(
     }
 );
 
+//  Fetch Single User Specific Blogs by slug (Blog Details page)
+export const fetchBlogBySlug = createAsyncThunk(
+    "blog/fetchBlogBySlug",
+    async (slug, { rejectWithValue }) => {
+        try {
+            const res = await API.get(`/blog/slug/${slug}`);
+            return res.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || "Blog not found");
+        }
+    }
+);
+
+
 // FETCH LOGGED-IN USER BLOGS (Profile Page)
 export const fetchMyBlogs = createAsyncThunk(
     "blog/fetchMyBlogs",
-    async (_, { rejectWithValue }) => {
+  async (userId = null, { rejectWithValue }) => {
         try {
-            // Frontend se hum sirf API call karte hain
-            const res = await API.get("/blog/my-blogs");
-            // console.log("thunk:", res)
-            return res.data; // Ye action.payload mein jayega
+            // Agar userId hai toh query string bhejenge, warna khali (for own blogs)
+            const url = userId ? `/blog/my-blogs?userId=${userId}` : "/blog/my-blogs";
+            
+            const res = await API.get(url);
+            
+            // Note: Aapka backend data 'data.blogs' mein bhej raha hai
+            return res.data; 
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || "Failed to fetch your blogs");
+            return rejectWithValue(error.response?.data?.message || "Failed to fetch blogs");
         }
     }
 );

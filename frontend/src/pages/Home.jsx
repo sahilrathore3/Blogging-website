@@ -9,11 +9,11 @@ const Home = () => {
   const { blogs, loading } = useSelector((state) => state.blog);
 
   // Backend Base URL
-  const base_url = "http://localhost:3000";
+  const base_url = "http://localhost:3000"; 
 
   useEffect(() => {
-    // Home page ke liye top 10 trending blogs
-    dispatch(fetchRecentBlogs({ page: 1, limit: 10,sort: "views" }));
+    // Home page ke liye top 10 trending blogs (views ke according sort)
+    dispatch(fetchRecentBlogs({ page: 1, limit: 10, sort: "views" }));
   }, [dispatch]);
 
   return (
@@ -67,7 +67,15 @@ const Home = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
               {blogs && blogs.map((blog, index) => (
-                <div key={blog._id} className="flex flex-col group cursor-pointer">
+                <div key={blog._id} className="group relative flex flex-col cursor-pointer bg-white">
+                  
+                  {/* --- CLICKABLE OVERLAY --- */}
+                  {/* Yeh link pure card area ko cover kar lega */}
+                  <Link 
+                    to={`/blog/${blog.slug}`} 
+                    className="absolute inset-0 z-10" 
+                    aria-label={`Read more about ${blog.title}`}
+                  />
                   
                   {/* 🖼️ 1. Cover Image */}
                   <div className="relative mb-6 overflow-hidden rounded-2xl aspect-video bg-gray-100 shadow-sm border border-gray-50">
@@ -77,13 +85,14 @@ const Home = () => {
                       alt="blog cover"
                       onError={(e) => { e.target.src = "https://placehold.co/600x400?text=Blog+Cover"; }}
                     />
-                    <div className="absolute top-4 left-4 bg-white/95 backdrop-blur px-3 py-1 rounded-full shadow-md">
+                    {/* Index Number Badge - Overlay ke upar dikhane ke liye z-20 */}
+                    <div className="absolute top-4 left-4 bg-white/95 backdrop-blur px-3 py-1 rounded-full shadow-md z-20">
                       <span className="text-sm font-black text-blue-600">0{index + 1}</span>
                     </div>
                   </div>
 
-                  {/* 👤 2. Author Info */}
-                  <div className="flex items-center gap-2 mb-3">
+                  {/* 👤 2. Author Info - relative z-20 taaki hover effects aur buttons block na ho */}
+                  <div className="flex items-center gap-2 mb-3 relative z-20 pointer-events-none">
                     <div className="w-7 h-7 rounded-full bg-gray-100 border border-gray-200 overflow-hidden">
                       <img 
                         src={blog.authorId?.profilePic ? `${base_url}${blog.authorId.profilePic}` : `https://ui-avatars.com/api/?name=${blog.authorId?.username}&background=random`} 
@@ -91,21 +100,23 @@ const Home = () => {
                         alt={blog.authorId?.username}
                       />
                     </div>
-                    <span className="text-xs font-bold text-gray-800 tracking-tight">{blog.authorId?.username || "Anonymous"}</span>
+                    <span className="text-xs font-bold text-gray-800 tracking-tight">
+                        {blog.authorId?.username || "Anonymous"}
+                    </span>
                   </div>
 
-                  {/* 📝 3. Title & Excerpt */}
-                  <Link to={`/blog/${blog._id}`} className="flex-1">
+                  {/* 3. Title & Excerpt */}
+                  <div className="flex-1">
                     <h3 className="font-extrabold text-xl leading-tight text-gray-900 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 mb-3">
                       {blog.title}
                     </h3>
                     <p className="text-sm text-gray-500 line-clamp-3 font-medium leading-relaxed">
                       {blog.content.replace(/<[^>]*>/g, '')}
                     </p>
-                  </Link>
+                  </div>
 
-                  {/* 📊 4. Meta Info */}
-                  <div className="flex items-center gap-4 mt-6 pt-5 border-t border-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em]">
+                  {/* 4. Meta Info */}
+                  <div className="flex items-center gap-4 mt-6 pt-5 border-t border-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] relative z-20 pointer-events-none">
                     <span>{new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                     <span className="text-gray-200">•</span>
                     <span className="flex items-center gap-1.5">
@@ -120,7 +131,7 @@ const Home = () => {
               ))}
             </div>
 
-            {/* ✨ 5. View All Blogs Button (Added Here) ✨ */}
+            {/* 5. View All Blogs Button */}
             <div className="mt-24 text-center">
               <Link
                 to="/all-blogs"

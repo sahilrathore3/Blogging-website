@@ -7,9 +7,11 @@ import UserFormModal from '../modal/UserFormModal';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { X, Upload, Save, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // Redux State
     const { users, loading, total, page, limit } = useSelector((state) => state.admin);
@@ -61,17 +63,23 @@ const Dashboard = () => {
             sortable: true,
             minWidth: '280px',
             cell: (row) => (
-                <div className="flex items-center gap-3 py-3">
-                    <img
-                        src={row.profilePic || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'}
-                        alt="avatar"
-                        className="w-11 h-11 rounded-xl border-2 border-gray-100 object-cover shadow-sm"
-                    />
+                <div 
+                    className="flex items-center gap-3 py-3 cursor-pointer group transition-all"
+                    onClick={() => navigate(`/admin/user-blogs/${row._id}`)} // Redirect to user blogs
+                    title="View User Blogs"
+                >
+                    <div className="relative overflow-hidden rounded-xl border-2 border-gray-100 group-hover:border-indigo-400 transition-all">
+                        <img
+                            src={row.profilePic || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'}
+                            alt="avatar"
+                            className="w-11 h-11 object-cover shadow-sm group-hover:scale-110 transition-transform duration-300"
+                        />
+                    </div>
                     <div className="flex flex-col">
-                        <span className="font-bold text-gray-900 leading-tight">
+                        <span className="font-bold text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">
                             {row.firstName ? `${row.firstName} ${row.lastName}` : row.username}
                         </span>
-                        <span className="text-xs text-gray-500 font-medium">{row.email}</span>
+                        <span className="text-xs text-gray-500 font-medium group-hover:text-indigo-400 transition-colors">{row.email}</span>
                     </div>
                 </div>
             ),

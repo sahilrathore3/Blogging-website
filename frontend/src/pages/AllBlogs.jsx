@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchRecentBlogs } from '../redux/thunk/blogThunk';
-// import {ReactPaginate} from 'react-paginate';
-// import * as ReactPaginate from 'react-paginate'
 import ReactPaginateModule from 'react-paginate';
 const ReactPaginate = ReactPaginateModule.default || ReactPaginateModule;
-// import ReactPaginateModule from 'react-paginate'
 import { Link } from 'react-router-dom';
 
 const AllBlogs = () => {
@@ -26,12 +23,13 @@ const AllBlogs = () => {
         dispatch(fetchRecentBlogs({ page: selectedPage, limit: itemsPerPage }));
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-console.log("Check Pagination Object:", pagination);
-console.log("Type of ReactPaginate:", typeof ReactPaginate);
-console.log("Value of ReactPaginate:", ReactPaginate);
+// console.log("Check Pagination Object:", pagination);
+// console.log("Type of ReactPaginate:", typeof ReactPaginate);
+// console.log("Value of ReactPaginate:", ReactPaginate);
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen bg-white">
+                
                 <div className="flex flex-col items-center gap-4">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600 border-solid"></div>
                     <p className="text-gray-500 font-bold animate-pulse">Loading Archive...</p>
@@ -56,7 +54,7 @@ console.log("Value of ReactPaginate:", ReactPaginate);
                 </div>
 
                 {/* --- Blogs Grid --- */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-15">
                     {/* Array.isArray check taaki map() crash na ho */}
                     {Array.isArray(blogs) && blogs.length > 0 ? (
                         blogs.map((blog) => (
@@ -94,10 +92,10 @@ console.log("Value of ReactPaginate:", ReactPaginate);
                                     </p>
 
                                     <Link
-                                        to={`/blog/${blog._id}`}
+                                        to={`/blog/${blog.slug}`}
                                         className="flex items-center justify-center w-full py-4 bg-gray-50 rounded-2xl font-black text-gray-900 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 mt-auto"
                                     >
-                                        READ STORY
+                                        READ Full Blog
                                     </Link>
                                 </div>
                             </div>
